@@ -1,0 +1,22 @@
+package com.swayam.demo.springbootdemo.cucumber.dao;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.swayam.demo.springbootdemo.cucumber.model.Book;
+
+public interface BookDao extends CrudRepository<Book, Integer> {
+
+    List<Book> findByNameContainingIgnoreCase(String name);
+
+    @Transactional
+    @Modifying
+    @Query("update Book set author.id = :authorId where id = :bookId")
+    int updateAuthor(@Param("bookId") int bookId, @Param("authorId") int authorId);
+
+}
